@@ -12,17 +12,23 @@ for (let i = 0; i < gameSize; i++) {
   const enemy = document.createElement("div");
   game.appendChild(enemy);
 }
+
+
+// query selector for classes
+const platforms = Array.from(document.querySelectorAll("#game div"));
+
 const vars = (() => {
   const enemies = [];
   const max = 40;
   for (let i = 0; i <= max; i++) {
-    enemies.push(i);
+    if (i > 15 && i < 25 ) {
+      continue;
+    } else {
+      enemies.push(i);
+    }
   }
   return enemies;
 })(); // <== this double parenthesis at the end executes it so that it executes the function and returns the value, vars is no longer a function but an array;
-
-// query selector for classes
-const platforms = Array.from(document.querySelectorAll("#game div"));
 
 const drawVars = () => {
   for (let i = 0; i < vars.length; i++) {
@@ -63,11 +69,34 @@ document.addEventListener("keydown", moveHero); // why no parenthesis
 // stackoverflow: no parenthesis because moveHero is being used as a function reference rather than returning the value of the function, if executed it would execute and return undefined
 
 const moveVars = () => {
+
+  // both leftEdge and rightEdge are booleans
+
   const leftEdge = vars[0] % gameWidth === 0; //they are now on the left edge
-  // the index is the very last invader (minus 1 because indexes start from 0 (length does not account for this))
+  
+  // for the right edge the index is the very last invader (minus 1 because indexes start from 0 (length does not account for this))
   const rightEdge = vars[vars.length - 1] % gameWidth === gameWidth - 1;
+  
   removeVars();
 
+  // if vars have reached the rightEdge (judging from the position of the last var)
+  // move all the vars in the opposite direction
+  // because they are still touching the edge when moving down, ignore it if the direction has changed
+  if (rightEdge && direction === 1) {
+    for (let i = 0; i < vars.length; i++) {
+      // this moves all the vars down 1 step
+      vars[i] += gameWidth + 1;
+      // this changes the direction of all the vars
+      direction = -1;
+    }
+  }
+
+  if (leftEdge && direction === -1) {
+    for (let i = 0; i < vars.length; i++) {
+      vars[i] += gameWidth - 1;
+      direction = 1;
+    }
+  }
 
   for (let i = 0; i < vars.length; i++) {
     vars[i] += direction;
