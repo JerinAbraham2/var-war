@@ -123,4 +123,21 @@ const moveVars = () => {
     clearInterval(movingVarsRef);
   }
 };
-movingVarsRef = setInterval(moveVars, 20);
+
+movingVarsRef = setInterval(moveVars, 200);
+
+// shooting the vars with lets
+function shootLets(e) {
+  let letProjectileId;
+  let letProjectileIndex = letHeroPosition; // im not sure about this 
+  const flyingLets = () => {
+    platforms[letProjectileIndex].classList.remove('let-projectile');
+    letProjectileIndex -= gameWidth;
+    platforms[letProjectileIndex].classList.add('let-projectile')
+  }
+  if (e.key === "ArrowUp" || e.key === "w") {
+    letProjectileId = setInterval(flyingLets, 100);
+  }
+}
+
+document.addEventListener('keydown', shootLets);
