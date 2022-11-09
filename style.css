@@ -24,3 +24,8 @@ main {
 .let-hero {
   background-color: aquamarine;
 }
+
+.results {
+  color: blue;
+  background-color: aqua;
+}

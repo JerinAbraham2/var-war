@@ -1,5 +1,8 @@
 "use strict";
 const game = document.getElementById("game");
+const displayResult = document.createElement("h1");
+
+
 
 // variables
 const gameSize = 375;
@@ -16,6 +19,10 @@ for (let i = 0; i < gameSize; i++) {
 
 // query selector for classes
 const platforms = Array.from(document.querySelectorAll("#game div"));
+
+// adds h1 display to the middle platform
+platforms[85].appendChild(displayResult);
+
 
 const vars = (() => {
   const enemies = [];
@@ -76,7 +83,7 @@ const moveVars = () => {
   
   // for the right edge the index is the very last invader (minus 1 because indexes start from 0 (length does not account for this))
   const rightEdge = vars[vars.length - 1] % gameWidth === gameWidth - 1;
-  
+  // remove the vars
   removeVars();
 
   // if vars have reached the rightEdge (judging from the position of the last var)
@@ -97,11 +104,19 @@ const moveVars = () => {
       direction = 1;
     }
   }
-
+  // move all the vars by one depending on direction
   for (let i = 0; i < vars.length; i++) {
     vars[i] += direction;
   }
+  // draw the vars (after moving)
   drawVars();
+  // does the hero hit the var? 
+  if (platforms[letHeroPosition].classList.contains('var', 'let-hero')) {
+    // Title screen
+    displayResult.innerHTML = 'GAME OVER';
+    // save memory
+    clearInterval(movingVarsRef);
+  }
 };
 
-movingVarsRef = setInterval(moveVars, 200);
+movingVarsRef = setInterval(moveVars, 20);
