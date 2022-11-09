@@ -2,8 +2,6 @@
 const game = document.getElementById("game");
 const displayResult = document.createElement("h1");
 
-
-
 // variables
 const gameSize = 375;
 const gameWidth = 25;
@@ -117,6 +115,12 @@ const moveVars = () => {
     // save memory
     clearInterval(movingVarsRef);
   }
-};
 
+  // finding it hard to hit the bottom edge precisely;
+  // this works for now, but does not hit the bottom precisely
+  if (vars[vars.length - 1] > platforms.length - 2) {
+    displayResult.innerHTML = "GAME OVER";
+    clearInterval(movingVarsRef);
+  }
+};
 movingVarsRef = setInterval(moveVars, 20);
