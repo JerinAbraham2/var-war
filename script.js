@@ -8,12 +8,12 @@ const gameWidth = 25;
 let letHeroPosition = 355;
 let direction = 1; // 1 for right -1 for left
 let movingVarsRef = null;
+const removedVars = [];
 
 for (let i = 0; i < gameSize; i++) {
   const enemy = document.createElement("div");
   game.appendChild(enemy);
 }
-
 
 // query selector for classes
 const platforms = Array.from(document.querySelectorAll("#game div"));
@@ -21,12 +21,11 @@ const platforms = Array.from(document.querySelectorAll("#game div"));
 // adds h1 display to the middle platform
 platforms[85].appendChild(displayResult);
 
-
-const vars = (() => {
+let vars = (() => {
   const enemies = [];
   const max = 40;
   for (let i = 0; i <= max; i++) {
-    if (i > 15 && i < 25 ) {
+    if (i > 15 && i < 25) {
       continue;
     } else {
       enemies.push(i);
@@ -74,11 +73,10 @@ document.addEventListener("keydown", moveHero); // why no parenthesis
 // stackoverflow: no parenthesis because moveHero is being used as a function reference rather than returning the value of the function, if executed it would execute and return undefined
 
 const moveVars = () => {
-
   // both leftEdge and rightEdge are booleans
 
   const leftEdge = vars[0] % gameWidth === 0; //they are now on the left edge
-  
+
   // for the right edge the index is the very last invader (minus 1 because indexes start from 0 (length does not account for this))
   const rightEdge = vars[vars.length - 1] % gameWidth === gameWidth - 1;
   // remove the vars
@@ -108,10 +106,10 @@ const moveVars = () => {
   }
   // draw the vars (after moving)
   drawVars();
-  // does the hero hit the var? 
-  if (platforms[letHeroPosition].classList.contains('var', 'let-hero')) {
+  // does the hero hit the var?
+  if (platforms[letHeroPosition].classList.contains("var", "let-hero")) {
     // Title screen
-    displayResult.innerHTML = 'GAME OVER';
+    displayResult.innerHTML = "GAME OVER";
     // save memory
     clearInterval(movingVarsRef);
   }
@@ -122,22 +120,43 @@ const moveVars = () => {
     displayResult.innerHTML = "GAME OVER";
     clearInterval(movingVarsRef);
   }
+  if (vars.length === 0) {
+    displayResult.innerHTML = "YOU WIN";
+    clearInterval(movingVarsRef);
+  }
 };
-
-movingVarsRef = setInterval(moveVars, 200);
+//turn it off here
+movingVarsRef = setInterval(moveVars, 50);
 
 // shooting the vars with lets
 function shootLets(e) {
   let letProjectileId;
-  let letProjectileIndex = letHeroPosition; // im not sure about this 
+  let letProjectileIndex = letHeroPosition; // im not sure about this
   const flyingLets = () => {
-    platforms[letProjectileIndex].classList.remove('let-projectile');
+    platforms[letProjectileIndex].classList.remove("let-projectile");
     letProjectileIndex -= gameWidth;
-    platforms[letProjectileIndex].classList.add('let-projectile')
-  }
+    platforms[letProjectileIndex].classList.add("let-projectile");
+
+    // does the projectile hit any of the vars
+    if (vars.some((element) => element === letProjectileIndex && !removedVars.includes(element))) {
+      platforms[letProjectileIndex].classList.remove("let-projectile");
+      platforms[letProjectileIndex].classList.remove("var");
+      platforms[letProjectileIndex].classList.add("explosive");
+
+      setTimeout(() => platforms[letProjectileIndex].classList.remove("explosive"), 300);
+      clearInterval(letProjectileId);
+
+      vars = vars.filter(element => element !== letProjectileIndex);
+
+      const removeVarIndex = vars.indexOf(letProjectileIndex);
+      removedVars.push(removeVarIndex);
+      console.log();
+    }
+  };
+
   if (e.key === "ArrowUp" || e.key === "w") {
     letProjectileId = setInterval(flyingLets, 100);
   }
 }
 
-document.addEventListener('keydown', shootLets);
+document.addEventListener("keydown", shootLets);
