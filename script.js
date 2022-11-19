@@ -123,7 +123,7 @@ const moveVars = () => {
   // draw the vars (after moving)
   drawVars();
   // does the hero hit the var?
-  if (platforms[letHeroPosition].textContent.contains("var", "let-hero")) {
+  if (platforms[letHeroPosition].textContent.includes("var", "let-hero")) {
     // Title screen
     displayResult.innerHTML = "GAME OVER";
     platforms[85].appendChild(displayResult);
