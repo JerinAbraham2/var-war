@@ -56,12 +56,12 @@ const moveHero = (e) => {
   // remove where he is
   platforms[letHeroPosition].classList.remove("let-hero");
   // what key is the user pressing? (left to right)
-  if ((e.key === "ArrowLeft" || e.key === "a") || (keyDownObjects["w"] && keyDownObjects["a"])) {
+  if ((e.key === "ArrowLeft" || e.key === "a") || (keyDownObjects["w"] && keyDownObjects["a"]) || (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowLeft"])) {
     // if its divisible by 25 and leaves no remainder it means we are the left  edge
     if (letHeroPosition % gameWidth !== 0) {
       letHeroPosition -= 1;
     }
-  } else if ((e.key === "ArrowRight" || e.key === "d") || (keyDownObjects["w"] && keyDownObjects["d"])) {
+  } else if ((e.key === "ArrowRight" || e.key === "d") || (keyDownObjects["w"] && keyDownObjects["d"]) || (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowRight"])) {
     // if its not at the right handside edge then we can move keep moving right
     if (letHeroPosition % gameWidth < gameWidth - 1) {
       letHeroPosition += 1;
@@ -162,7 +162,7 @@ function shootLets(e) {
     }
   };
 
-  if (e.key === "ArrowUp" || e.key === "w" || (keyDownObjects["w"] && keyDownObjects["d"]) || (keyDownObjects["w"] && keyDownObjects["a"])) {
+  if (e.key === "ArrowUp" || e.key === "w" || (keyDownObjects["w"] && keyDownObjects["d"]) || (keyDownObjects["w"] && keyDownObjects["a"]) || (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowLeft"]) || (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowRight"])) {
     letProjectileId = setInterval(flyingLets, 100);
   }
 }
