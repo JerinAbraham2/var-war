@@ -53,6 +53,7 @@ drawVars();
 
 // platforms[letHeroPosition].classList.add("let-hero");
 platforms[letHeroPosition].textContent = "const";
+platforms[letHeroPosition].fontWeight = "bolder";
 
 const moveHero = (e) => {
   // remove where he is
@@ -178,10 +179,10 @@ function shootLets(e) {
     if (vars.some((element) => element === letProjectileIndex && !removedVars.includes(element))) {
       // platforms[letProjectileIndex].classList.remove("let-projectile");
       platforms[letProjectileIndex].textContent = "";
-      platforms[letProjectileIndex].classList.remove("var");
+      // platforms[letProjectileIndex].classList.remove("var");
       platforms[letProjectileIndex].classList.add("explosive");
 
-      setTimeout(() => platforms[letProjectileIndex].classList.remove("explosive"), 300);
+      setTimeout(() => platforms[letProjectileIndex].classList.remove("explosive"), 100);
       clearInterval(letProjectileId);
 
       vars = vars.filter((element) => element !== letProjectileIndex);
