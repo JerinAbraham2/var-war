@@ -1,7 +1,16 @@
+body {
+  background-color: rgb(233, 232, 232);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 main {
   display: flex;
   justify-content: center;
+  align-items: center;
+  margin-top: 200px;
 }
+
 
 #game {
   width: 500px;
@@ -9,7 +18,8 @@ main {
   border: solid black 1px;
   display: flex;
   flex-wrap: wrap;
-  
+  background-color: rgb(212, 212, 212);
+  scale: 1.5;
 }
 
 #game div {
@@ -19,7 +29,7 @@ main {
 
 .var {
   background-color: aqua;
-  border-radius: 10px;
+  /* border-radius: 10px; */
 }
 
 .let-hero {

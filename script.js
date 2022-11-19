@@ -20,9 +20,6 @@ for (let i = 0; i < gameSize; i++) {
 // query selector for classes
 const platforms = Array.from(document.querySelectorAll("#game div"));
 
-// adds h1 display to the middle platform
-platforms[85].appendChild(displayResult);
-
 let vars = (() => {
   const enemies = [];
   const max = 40;
@@ -38,37 +35,54 @@ let vars = (() => {
 
 const drawVars = () => {
   for (let i = 0; i < vars.length; i++) {
-    platforms[vars[i]].classList.add("var");
+    // platforms[vars[i]].classList.add("var");
+    platforms[vars[i]].textContent = "var";
+    platforms[vars[i]].style.fontSize = "15px";
+    platforms[vars[i]].style.color = "blue";
   }
 };
 
 const removeVars = () => {
   for (let i = 0; i < vars.length; i++) {
-    platforms[vars[i]].classList.remove("var");
+    //platforms[vars[i]].classList.remove("var");
+    platforms[vars[i]].textContent = "";
   }
 };
 
 drawVars();
 
-platforms[letHeroPosition].classList.add("let-hero");
+// platforms[letHeroPosition].classList.add("let-hero");
+platforms[letHeroPosition].textContent = "const";
 
 const moveHero = (e) => {
   // remove where he is
-  platforms[letHeroPosition].classList.remove("let-hero");
+  // platforms[letHeroPosition].classList.remove("let-hero");
+  platforms[letHeroPosition].textContent = "";
   // what key is the user pressing? (left to right)
-  if ((e.key === "ArrowLeft" || e.key === "a") || (keyDownObjects["w"] && keyDownObjects["a"]) || (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowLeft"])) {
+  if (
+    e.key === "ArrowLeft" ||
+    e.key === "a" ||
+    (keyDownObjects["w"] && keyDownObjects["a"]) ||
+    (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowLeft"])
+  ) {
     // if its divisible by 25 and leaves no remainder it means we are the left  edge
     if (letHeroPosition % gameWidth !== 0) {
       letHeroPosition -= 1;
     }
-  } else if ((e.key === "ArrowRight" || e.key === "d") || (keyDownObjects["w"] && keyDownObjects["d"]) || (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowRight"])) {
+  } else if (
+    e.key === "ArrowRight" ||
+    e.key === "d" ||
+    (keyDownObjects["w"] && keyDownObjects["d"]) ||
+    (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowRight"])
+  ) {
     // if its not at the right handside edge then we can move keep moving right
     if (letHeroPosition % gameWidth < gameWidth - 1) {
       letHeroPosition += 1;
     }
   }
   // add where the hero is now
-  platforms[letHeroPosition].classList.add("let-hero");
+  // platforms[letHeroPosition].classList.add("let-hero");
+  platforms[letHeroPosition].textContent = "const";
 };
 // each time we click a key down (as in press something not the arrow down (I think))
 // why no parenthesis
@@ -109,9 +123,10 @@ const moveVars = () => {
   // draw the vars (after moving)
   drawVars();
   // does the hero hit the var?
-  if (platforms[letHeroPosition].classList.contains("var", "let-hero")) {
+  if (platforms[letHeroPosition].textContent.contains("var", "let-hero")) {
     // Title screen
     displayResult.innerHTML = "GAME OVER";
+    platforms[85].appendChild(displayResult);
     // save memory
     clearInterval(movingVarsRef);
   }
@@ -120,10 +135,14 @@ const moveVars = () => {
   // this works for now, but does not hit the bottom precisely
   if (vars[vars.length - 1] > platforms.length - 2) {
     displayResult.innerHTML = "GAME OVER";
+    platforms[85].appendChild(displayResult);
     clearInterval(movingVarsRef);
   }
   if (vars.length === 0) {
+    console.log("you win");
     displayResult.innerHTML = "YOU WIN";
+    // adds h1 display to the middle platform
+    platforms[85].appendChild(displayResult);
     clearInterval(movingVarsRef);
   }
 };
@@ -139,14 +158,16 @@ function shootLets(e) {
   const flyingLets = () => {
     try {
       if (letProjectileIndex >= 0) {
-      
         // platforms[letProjectileIndex].classList.remove("let-projectile");
-        platforms[letProjectileIndex].textContent = "";
+        if (letProjectileIndex < 350) {
+          platforms[letProjectileIndex].textContent = "";
+        }
 
         letProjectileIndex -= gameWidth;
         // platforms[letProjectileIndex].classList.add("let-projectile");
         platforms[letProjectileIndex].textContent = "let";
-
+        platforms[letProjectileIndex].style.color = "purple";
+        platforms[letProjectileIndex].fontWeight = "bold";
       } else {
         clearInterval(letProjectileId);
       }
@@ -167,7 +188,14 @@ function shootLets(e) {
     }
   };
 
-  if (e.key === "ArrowUp" || e.key === "w" || (keyDownObjects["w"] && keyDownObjects["d"]) || (keyDownObjects["w"] && keyDownObjects["a"]) || (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowLeft"]) || (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowRight"])) {
+  if (
+    e.key === "ArrowUp" ||
+    e.key === "w" ||
+    (keyDownObjects["w"] && keyDownObjects["d"]) ||
+    (keyDownObjects["w"] && keyDownObjects["a"]) ||
+    (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowLeft"]) ||
+    (keyDownObjects["ArrowUp"] && keyDownObjects["ArrowRight"])
+  ) {
     letProjectileId = setInterval(flyingLets, 100);
   }
 }
