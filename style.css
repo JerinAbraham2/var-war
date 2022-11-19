@@ -9,6 +9,7 @@ main {
   border: solid black 1px;
   display: flex;
   flex-wrap: wrap;
+  
 }
 
 #game div {
@@ -31,7 +32,10 @@ main {
 }
 
 .let-projectile {
-  background-color:cadetblue;
+  background-image: url("./resources/imgs/lets.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:cover;
 }
 
 .explosive {

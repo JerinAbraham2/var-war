@@ -140,9 +140,13 @@ function shootLets(e) {
     try {
       if (letProjectileIndex >= 0) {
       
-        platforms[letProjectileIndex].classList.remove("let-projectile");
+        // platforms[letProjectileIndex].classList.remove("let-projectile");
+        platforms[letProjectileIndex].textContent = "";
+
         letProjectileIndex -= gameWidth;
-        platforms[letProjectileIndex].classList.add("let-projectile");
+        // platforms[letProjectileIndex].classList.add("let-projectile");
+        platforms[letProjectileIndex].textContent = "let";
+
       } else {
         clearInterval(letProjectileId);
       }
@@ -151,7 +155,8 @@ function shootLets(e) {
     }
     // does the projectile hit any of the vars
     if (vars.some((element) => element === letProjectileIndex && !removedVars.includes(element))) {
-      platforms[letProjectileIndex].classList.remove("let-projectile");
+      // platforms[letProjectileIndex].classList.remove("let-projectile");
+      platforms[letProjectileIndex].textContent = "";
       platforms[letProjectileIndex].classList.remove("var");
       platforms[letProjectileIndex].classList.add("explosive");
 
