@@ -3,12 +3,14 @@ const game = document.getElementById("game");
 const displayResult = document.createElement("h1");
 
 // variables
+
 const gameSize = 375;
 const gameWidth = 25;
 let letHeroPosition = 355;
 let direction = 1; // 1 for right -1 for left
 let movingVarsRef = null;
 const removedVars = [];
+const keyDownObjects = {};
 
 for (let i = 0; i < gameSize; i++) {
   const enemy = document.createElement("div");
@@ -54,12 +56,12 @@ const moveHero = (e) => {
   // remove where he is
   platforms[letHeroPosition].classList.remove("let-hero");
   // what key is the user pressing? (left to right)
-  if (e.key === "ArrowLeft" || e.key === "a") {
+  if ((e.key === "ArrowLeft" || e.key === "a") || (keyDownObjects["w"] && keyDownObjects["a"])) {
     // if its divisible by 25 and leaves no remainder it means we are the left  edge
     if (letHeroPosition % gameWidth !== 0) {
       letHeroPosition -= 1;
     }
-  } else if (e.key === "ArrowRight" || e.key === "d") {
+  } else if ((e.key === "ArrowRight" || e.key === "d") || (keyDownObjects["w"] && keyDownObjects["d"])) {
     // if its not at the right handside edge then we can move keep moving right
     if (letHeroPosition % gameWidth < gameWidth - 1) {
       letHeroPosition += 1;
@@ -69,7 +71,7 @@ const moveHero = (e) => {
   platforms[letHeroPosition].classList.add("let-hero");
 };
 // each time we click a key down (as in press something not the arrow down (I think))
-document.addEventListener("keydown", moveHero); // why no parenthesis
+// why no parenthesis
 // stackoverflow: no parenthesis because moveHero is being used as a function reference rather than returning the value of the function, if executed it would execute and return undefined
 
 const moveVars = () => {
@@ -130,13 +132,23 @@ movingVarsRef = setInterval(moveVars, 50);
 
 // shooting the vars with lets
 function shootLets(e) {
+  keyDownObjects[e.key] = true;
+
   let letProjectileId;
   let letProjectileIndex = letHeroPosition; // im not sure about this
   const flyingLets = () => {
-    platforms[letProjectileIndex].classList.remove("let-projectile");
-    letProjectileIndex -= gameWidth;
-    platforms[letProjectileIndex].classList.add("let-projectile");
-
+    try {
+      if (letProjectileIndex >= 0) {
+      
+        platforms[letProjectileIndex].classList.remove("let-projectile");
+        letProjectileIndex -= gameWidth;
+        platforms[letProjectileIndex].classList.add("let-projectile");
+      } else {
+        clearInterval(letProjectileId);
+      }
+    } catch (e) {
+      console.log(e);
+    }
     // does the projectile hit any of the vars
     if (vars.some((element) => element === letProjectileIndex && !removedVars.includes(element))) {
       platforms[letProjectileIndex].classList.remove("let-projectile");
@@ -146,17 +158,15 @@ function shootLets(e) {
       setTimeout(() => platforms[letProjectileIndex].classList.remove("explosive"), 300);
       clearInterval(letProjectileId);
 
-      vars = vars.filter(element => element !== letProjectileIndex);
-
-      const removeVarIndex = vars.indexOf(letProjectileIndex);
-      removedVars.push(removeVarIndex);
-      console.log();
+      vars = vars.filter((element) => element !== letProjectileIndex);
     }
   };
 
-  if (e.key === "ArrowUp" || e.key === "w") {
+  if (e.key === "ArrowUp" || e.key === "w" || (keyDownObjects["w"] && keyDownObjects["d"]) || (keyDownObjects["w"] && keyDownObjects["a"])) {
     letProjectileId = setInterval(flyingLets, 100);
   }
 }
 
 document.addEventListener("keydown", shootLets);
+document.addEventListener("keyup", (e) => delete keyDownObjects[e.key]);
+document.addEventListener("keydown", moveHero);
