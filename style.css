@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(233, 232, 232);
+  background-color: rgb(196, 196, 196);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -7,13 +7,7 @@ body {
 main {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: 200px;
-}
-
-footer {
-  margin-top: 10em;
-  text-align: center;
+  margin-top: 160px;
 }
 
 #game {
@@ -22,7 +16,7 @@ footer {
   border: solid black 1px;
   display: flex;
   flex-wrap: wrap;
-  background-color: rgb(212, 212, 212);
+  background-color: rgb(231, 231, 231);
   scale: 1.5;
 }
 
@@ -49,10 +43,19 @@ footer {
   background-image: url("./resources/imgs/lets.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size:cover;
+  background-size: cover;
 }
 
 .explosive {
   background-color: rgb(255, 49, 49);
+}
 
+#title {
+  text-align: center;
+  font-size: 3em;
+  margin-bottom: 0;
+}
+
+.info {
+  margin-bottom: 10em;
 }
